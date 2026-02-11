@@ -1,5 +1,5 @@
 import models.Product;
-import respository.ProductRepository;
+import repository.ProductRepository;
 
 import java.sql.*;
 import java.util.List;
