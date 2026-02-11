@@ -1,4 +1,8 @@
+import models.Product;
+import respository.ProductRepository;
+
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 public class App {
@@ -7,13 +11,27 @@ public class App {
         try (Connection conn = setup()) {
             if (conn.isValid(5)) {
                 System.out.println("--- Connection Verified ---");
-
                 createAndSetSchema(conn);
-                createTables(conn);
 
-                // Insert a test product
-                insertProduct(conn, "Mechanical Keyboard", "RGB, Brown Switches", 89.99, 15);
+                ProductRepository repo = new ProductRepository(conn);
 
+                // setup the database
+                repo.createTable();
+                Product newKeyboard = new Product("MSI Keyboard", "Mechanical switches", 99.99, 10);
+                repo.save(newKeyboard);
+                Product razorMouse = new Product("RAZER VIPER V3 PRO", "Ultra-lighweight Wireless Symmetrical Esports Mouse",
+                        89.99, 15);
+                repo.save(razorMouse);
+                Product airPodsProMax = new Product("APPLE Airpods Pro Max", "Sleek and modern premium over-ear headphones",
+                        499.99, 26);
+                repo.save(airPodsProMax);
+                Product nvidiaRtx5090 = new Product("NVIDIA GeForce RTX 5090", "Ultimate, enthusiast-class flagship GPU, offering unprecedented performance for 4K gaming",
+
+                        4499.99, 20);
+                repo.save(nvidiaRtx5090);
+
+                List<Product> catalogue = repo.findAll();
+                catalogue.forEach(System.out::println);
                 System.out.println("--- Setup Complete ---");
             }
         } catch (SQLException e) {
